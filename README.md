@@ -1,13 +1,13 @@
 # scHinter: Imputing dropout events for single-cell RNA-seq data with limited sample size
 2019-03-26
-## 1. Overview 
+##  Overview 
 scHinter is a Matlab package for imputing dropout events for scRNA-seq with special emphasis on data with limited sample size. scHinter consists of three modules (Figure 1), incorporates a voting-based consensus distance and leverages the synthetic minority over-sampling technique for random interpolation. A hierarchical framework is also embedded in scHinter to increase the reliability of the imputation for small samples. The imputed expression matrix from scHinter can be used for as inputs for other existing scRNA-seq pipelines or tools for downstream analyses, such as cell type clustering, dimension reduction, and visualization.
 
 ![fig1]( https://github.com/BMILAB/scHinter/blob/master/image/Schematic%20diagram.png)
 ### Figure 1. Schematic diagram of the scHinter framework. 
 (a) The voting-based consensus distance assembles several widely used distances into one consensus solution. (b) The random interpolation adopts the SMOTE (Synthetic Minority Over-sampling Technique) oversampling strategy and assigns random weights to cells according to the consensus distance. (c) The hierarchical framework was performed in a multi-layer manner, which gradually adds more cells for random interpolation and employs the probability density curves of geometric distribution with different mathematical expectations to weight cells under each layer. 
  
-## 2. Import data sets and function
+##  Import data sets and function
 The input to scHinter is matrix of gene expression. The rows correspond to cells and the columns correspond to genes. In this study, we will use the human tissues cells data from[1] as example.
 
 ```
@@ -15,26 +15,26 @@ clear;clc;
 addpath('...\code');
 load('...\matlab.mat');
 ```
-## 3. Data normalization 
+##  Data normalization 
 scHinter firstly normalized the expression matrix by the library size of each cell, so that each cell will have an equal transcript count. This effectively eliminates cell size as a signal in the measurement for the purposes of constructing the affinity matrix and thus the resulting weighted neighborhood is not biased by cell size. 
 
 libsize = sum(data,2);
 data = bsxfun(@rdivide, data, libsize) * median(libsize);
 
-## 4. Calculate consensus distance
+##  Calculate consensus distance
 scHinter calculate Cell-cell similarities learned by a voting-based consensus distance metric. Here, five distance measures were used to rank similarity between cells, including Euclidean distance, Manhattan distance, cosine distance, Pearson correlation coefficient, and Spearman correlation coefficient[2][3][4]. Parameter w is a weight for vote on the importance of different measures.
 
 ```
 [TOT_rank]=dist_consensus(data,w);
 ```
-## 5. Random interpolation 
+##  Random interpolation 
 scHinter implements random interpolation inspired by the oversampling strategy of SMOTE[5], which allows obtaining more data for classes with small sample size by oversampling to mitigate the imbalance of sample number in different classes. The expression matrix is updated after random interpolation. The corresponding parameter details can be referred to the comments in the code and supplementary materials of the article.
 
 ```
 data_new=rdint(data,TOT_rank,sgm,m,thres,f)
 ```
 
-## 6. Hierarchical framework 
+##  Hierarchical framework 
 Random interpolation was embedded under a hierarchical framework (Supplementary Fig. 1c), where multiple layers of interpolation are iteratively conducted by gradually including more cells as the most similar cells to the target cell.
 
 ```
@@ -47,7 +47,7 @@ for qq=1:length(ex)
 end
 ```
 
-## 7. Performance after imputing single cells 
+##  Performance after imputing single cells 
 Figure 2 shows the t-SNE distribution effect of the data in the example after hierarchical interpolation. In addition, Figure 3 shows the distribution of each data in the article after imputing, including the two-dimensional distribution, heat map and bar chart of external performance of clustering metrics. Other performance results are described in detail in the article.
 
 ![fig2](https://github.com/BMILAB/scHinter/blob/master/image/illustration%20of%20hierachical%20framework.png)
