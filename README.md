@@ -58,6 +58,10 @@ Patel data was used as an example and the maximum number of layers is set at 6 a
 ### Figure 3. Benchmarking of scHinter on the Yan data. 
 (a) t-SNE visualization on the imputed matrix from each individual tool. (b) Heatmaps for similarities learned from the data by Euclidean distances. The scales in relative units denote the similarity. Cells with the same cell type (annotated by the colored axes) are grouped together. (c) SC3 clustering accuracy on the imputed gene-cell expression matrix according to four performance metrics, including RI (Rand Index), FM (Fowlkes and Mallows Index), Jaccard, and NMI (Normalized Mutual Information). SC3 clustering is repeated for 10 times and each bar indicates the average performance.
 
+## Citation
+If you are using scHinter, please cite: [Ye P, Ye W, Ye C, Li S, Ye L, Ji G and Wu X (2020) scHinter: Imputing dropout events for single-cell RNA-seq data with limited sample size, Bioinformatics, 36, 789–797.](https://academic.oup.com/bioinformatics/article-abstract/36/3/789/5544928?redirectedFrom=fulltext)
+
+
 ## Reference 
 [1]	A. P. Patel et al., “NIH Public Access,” Science (80-. )., vol. 344, no. 6190, pp. 1396–1401, 2014.
 
